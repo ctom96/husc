@@ -1,0 +1,122 @@
+HUSC data format: A simpler way to write down objects
+
+HUSC -	Hierarchical Universal Struct Core - or really a fuged name to name this format
+	after my husky puppy Roz
+
+JSON Object:
+
+[object_name]:
+    [optional type] [attribute_name] [value]
+    [a] [array name]:
+        [optional type] [value]
+    [o] [object name]:
+        [optional type] [attribute_name] [value]
+
+Yields:
+
+    {
+        object_name: {
+            "attribute_name":value,
+            "array_name": [
+                "value",
+                "value"
+            ],
+            "object_name": {
+                "attribute_name":value
+            }
+        }
+    }
+
+Fields:
+    Field Name      Required?   Description
+
+    object_name     yes         Describes the accessor name of the JSON object
+    optional_type   no          Details the "type" of the value field. s=string*, n=number, o=JSON object, a=JSON array, b=boolean, N=null
+    attribute_name  yes         The name of the specific field or attribute in the object
+    value           yes         The contents of the JSON object associated with the preceeding attribute_name.
+
+Notes:
+    String is the default type if none is provided
+    It is 4 spaces to indicate a level of heirarchical progression.
+    JSON objects and arrays can be nested as far as you would like.
+    This notation does not support attribute names or values with any spacing, unless they are surrounded by ""
+        - This also automatically converts the value into a string
+
+
+Examples:
+
+Ex1:
+
+longsword:
+    n damage 100
+    n value 250
+    type steel
+    a damageTypes:
+        s thrusting
+        s cutting
+        s crushing
+    n weight 3.56
+
+Produces:
+
+{
+    "longsword": {
+        "damage":100,
+        "value":250,
+        "type":"steel",
+        "damageTypes": [
+            "thrusting",
+            "cutting",
+            "crushing"
+        ],
+        "weight":3.56
+    }
+}
+
+Ex2:
+
+person:
+    s name "Chris Tomasello"
+    n age 21
+    b male true
+    a parents:
+        o parent:
+            s name "Christy Tomasello"
+            n age 54
+            b male false
+        o parent:
+            s name "Terry Tomasello"
+            n age 56
+            b male true
+    
+Yields:
+
+{
+    "person": {
+        "name":"Chris Tomasello",
+        "age":21,
+        "male":true,
+        "parents": [
+            "parent": {
+                "name":"Christy Tomasello",
+                "age":54,
+                "male":false
+            },
+            "parent": {
+                "name":"Terry Tomasello",
+                "age":56,
+                "male":true
+            }
+        ]
+    }
+}
+
+{
+    "Dog": {
+        "name":"Roz",
+        "age":1,
+        "weight":50,
+        "breed":"Husky",
+        "playtime":4.5
+    }
+}
