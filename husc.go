@@ -7,6 +7,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"husc/huscutil"
 	"strings"
 )
 
@@ -32,7 +33,8 @@ func main() {
 				return
 			}
 		}
-		fmt.Println("This is the point where we would convert your files to .json...")
+
+		huscutil.ConvertToJSON(files)
 
 	} else if toHUSC {
 		for _, file := range files {

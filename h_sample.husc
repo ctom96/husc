@@ -1,0 +1,32 @@
+character:
+    s player Chris T
+    s character_name Duncan MacDonald
+    s class Barbarian
+    n level 10
+    n armor_class 14
+    n hit_points 32
+    n speed 30
+    a attributes:
+        o Strength:
+            n value 16
+            n modifier 3
+        o Dexterity:
+            n value 14
+            n modifier 2
+        o Constitution:
+            n value 15
+            n modifier 2
+        o Intelligence:
+            n value 9
+            n modifier -1
+        o Wisdom:
+            n value 13
+            n modifier 1
+        o Charisma:
+            n value 11
+            n modifier 0
+    a skills:
+        n Athletics 5
+        n Intimidation 2
+        n Perception 3
+        n Survival 3

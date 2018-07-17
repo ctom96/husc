@@ -76,16 +76,16 @@ Produces:
 Ex2:
 
 person:
-    s name "Chris Tomasello"
+    s name Chris T
     n age 21
     b male true
     a parents:
         o parent:
-            s name "Christy Tomasello"
+            s name Christy T
             n age 54
             b male false
         o parent:
-            s name "Terry Tomasello"
+            s name Terry T
             n age 56
             b male true
     
@@ -93,17 +93,17 @@ Yields:
 
 {
     "person": {
-        "name":"Chris Tomasello",
+        "name":"Chris T",
         "age":21,
         "male":true,
         "parents": [
             "parent": {
-                "name":"Christy Tomasello",
+                "name":"Christy T",
                 "age":54,
                 "male":false
             },
             "parent": {
-                "name":"Terry Tomasello",
+                "name":"Terry T",
                 "age":56,
                 "male":true
             }
