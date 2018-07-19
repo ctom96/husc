@@ -38,8 +38,13 @@ func parseFile(filePath string) {
 	// create scanner to scan file
 	scanner := bufio.NewScanner(file)
 
-	for scanner.Scan() {
-		fmt.Println(scanner.Text())
-	}
+	// Parse the file
+	var rootHusc huscObject
+	parentHusc := &rootHusc
+	indentLevel := 0
+
+	fmt.Println("Root's name:", rootHusc.name, "Type:", rootHusc.t, "Value:", rootHusc.value)
 
 }
+
+func parseHuscObject(scanner *Scanner)

@@ -41,6 +41,7 @@ Notes:
     JSON objects and arrays can be nested as far as you would like.
     This notation does not support attribute names or values with any spacing, unless they are surrounded by ""
         - This also automatically converts the value into a string
+    if no type is specified for an object_name, assumed to be of type object (not array)
 
 
 Examples:
