@@ -7,6 +7,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func check(e error) bool {
@@ -47,4 +48,29 @@ func parseFile(filePath string) {
 
 }
 
-func parseHuscObject(scanner *Scanner)
+// Recursively parse each huscObject
+func parseHuscObject(scanner *bufio.Scanner, level int) huscObject {
+
+	var currObject huscObject // current husc object
+	levelSpaces := level * 4
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.Contains(line, ":") {
+			// we are at a new husc object (or array)
+
+		}
+	}
+}
+
+func countSpaces(line string) int {
+	i := 0
+	for _, runeval := range line {
+		if runeval == ' ' {
+			i++
+		} else {
+			break
+		}
+	}
+	return i
+}
