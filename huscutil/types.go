@@ -2,36 +2,46 @@ package huscutil
 
 // "enum" for the type of each attribute
 // s = string, n = number, b = boolean o = object, a = array,
-// x = null,
-// v = value (In an attribute. Uses value field)
-// when prefixed with "a", means part of array. Use value only
+// N = null
 const (
-	s  = iota
-	n  = iota
-	b  = iota
-	o  = iota
-	a  = iota
-	x  = iota
-	v  = iota
-	as = iota
-	an = iota
-	ab = iota
-	ax = iota
+	s = iota
+	n = iota
+	b = iota
+	o = iota
+	a = iota
+	N = iota
 )
 
-// huscObject is used to represent the entire husc file parsed.
-// Since any particular husc object may contain simple data, an
-// array, or even another huscObject, these types need to be
-// simple, with complex definitions to use in parsing to JSON.
-//
-// name		Array/attribute/object name.
-// 			If in an array, name is only used for objects/arrays
-//
-// t		type, defined in const above. if o/a, treated specially
-//
-// value	Array of huscObjects.
+type huscCompliant interface {
+	dataType() int
+}
+
+// huscObject is used to represent a single object, like a single
+// JSON object. This specifically represents a huscObject of type o
+// so it must contain at least 1 other huscObject
 type huscObject struct {
-	name  string       // attribute/array/object name
-	t     int          // type
-	value []huscObject // values it has
+	name   string          // attribute/array/object name
+	values []huscCompliant // values it has
+}
+
+// Make huscObjects huscComplaint
+func (h huscObject) dataType() int {
+	return o
+}
+
+type huscArray struct {
+	name   string
+	values []huscCompliant
+}
+
+// huscSingle is a one-line huscObject, the simplest type
+type huscSingle struct {
+	name  string // Name of this single
+	dType int    // type of the data inside this object, defined in format.txt
+	value string // actual value
+}
+
+// Make huscSingles huscCompliant
+func (h huscSingle) dataType() int {
+	return h.dType
 }

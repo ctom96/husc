@@ -1,3 +1,6 @@
+
+
+
 character:
     s player Chris T
     s character_name Duncan MacDonald
@@ -25,7 +28,7 @@ character:
         o Charisma:
             n value 11
             n modifier 0
-    a skills:
+    o skills:
         n Athletics 5
         n Intimidation 2
         n Perception 3
