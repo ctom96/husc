@@ -14,6 +14,7 @@ const (
 
 type huscCompliant interface {
 	dataType() int
+	toString() string
 }
 
 // huscObject is used to represent a single object, like a single
@@ -29,9 +30,34 @@ func (h huscObject) dataType() int {
 	return o
 }
 
+func (h huscObject) toString() string {
+	retStr := h.name + ":{\n"
+	for _, val := range h.values {
+		retStr += "\t" + val.toString() + "\n"
+	}
+	retStr += "}"
+
+	return retStr
+}
+
 type huscArray struct {
 	name   string
 	values []huscCompliant
+}
+
+// Make huscArrays huscComplaint
+func (h huscArray) dataType() int {
+	return a
+}
+
+func (h huscArray) toString() string {
+	retStr := h.name + ":[\n"
+	for _, val := range h.values {
+		retStr += "\t" + val.toString() + "\n"
+	}
+	retStr += "]"
+
+	return retStr
 }
 
 // huscSingle is a one-line huscObject, the simplest type
@@ -44,4 +70,8 @@ type huscSingle struct {
 // Make huscSingles huscCompliant
 func (h huscSingle) dataType() int {
 	return h.dType
+}
+
+func (h huscSingle) toString() string {
+	return h.name + ": " + h.value
 }
