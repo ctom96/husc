@@ -31,68 +31,79 @@ func parseFile(filePath string) {
 	file, err := os.Open(filePath)
 	if !check(err) {
 		// Will exit function when opening file fails
-		fmt.Printf("Coould not open file %#v for parsing\n", filePath)
+		fmt.Printf("Could not open file %#v for parsing\n", filePath)
 		return
 	}
 	defer file.Close()
 
 	// create scanner to scan file
 	scanner := bufio.NewScanner(file)
+	scanner.Scan() // prep the scanner
 
 	// Parse the file
 	rootHusc := parseHuscObject(scanner, 0)
 
-	fmt.Println(rootHusc.toString())
+	fmt.Println(rootHusc.toString(0))
 
 }
 
-func parseHuscArray(scanner *bufio.Scanner, level int) (huscArray, int) {
+func parseHuscArray(scanner *bufio.Scanner, level int) huscArray {
 	var retArray huscArray
-	tmpScanner := &(*scanner)
 
-	numScans := 0
-
-	for tmpScanner.Scan() {
-		line := tmpScanner.Text()
-		elems := strings.Fields(line)
-
-		if countSpaces(line) == level*4 {
-			// we are at the first line of this object, get the name
+	if scanner.Text() != "" {
+		elems := strings.Fields(scanner.Text())
+		if len(elems) == 2 {
 			retArray.name = elems[1][:len(elems[1])-1]
+		} else {
+			// len(elems) == 1, so no o
+			retArray.name = elems[0][:len(elems[0])-1]
 		}
+
+	}
+	scanner.Scan()
+
+	for {
+		line := scanner.Text()
 
 		// add everything else as if it was a huscObject
 		if countSpaces(line) == (level+1)*4 {
-			retArray.values = append(retArray.values, parseHuscObject(tmpScanner, level+1))
+			retArray.values = append(retArray.values, parseHuscObject(scanner, level+1))
+		} else if countSpaces(line) < (level+1)*4 {
+			return retArray
 		}
-
-		numScans++
 	}
-
-	return retArray, numScans - 1
 }
 
 func parseHuscObject(scanner *bufio.Scanner, level int) huscObject {
 	var retObject huscObject
 
-	for scanner.Scan() {
+	if scanner.Text() != "" {
+		elems := strings.Fields(scanner.Text())
+		if len(elems) == 2 {
+			retObject.name = elems[1][:len(elems[1])-1]
+		} else {
+			// len(elems) == 1, so no o
+			retObject.name = elems[0][:len(elems[0])-1]
+		}
+	}
+
+	toScan := true
+
+	for {
+
+		// Implemented to fix issues with arrays
+		if toScan {
+			if !scanner.Scan() {
+				return retObject
+			}
+		} else {
+			toScan = true
+		}
+
 		line := scanner.Text()
 
 		if line == "" {
 			continue
-		}
-
-		// get name, when there
-		if countSpaces(line) == level*4 {
-			// we are at the first line of this object, get the name
-			elems := strings.Fields(line)
-			if len(elems) == 2 {
-				retObject.name = elems[1][:len(elems[1])-1]
-			} else {
-				// len(elems) == 1, so no o
-				retObject.name = elems[0][:len(elems[0])-1]
-			}
-			fmt.Println("retObject name =", retObject.name)
 		}
 
 		// Loot at the type of the next item to identify what to do, only when
@@ -104,13 +115,10 @@ func parseHuscObject(scanner *bufio.Scanner, level int) huscObject {
 				switch elems[0] {
 				case "a":
 					// parse array
-					ary, num := parseHuscArray(scanner, level+1)
+					ary := parseHuscArray(scanner, level+1)
 					retObject.values = append(retObject.values, ary)
-					fmt.Println(num)
-					// advance this scanner the appriate amount
-					// for i := 0; i < num; i++ {
-					// 	scanner.Scan()
-					// }
+					// parseHuscArray pushes scanner 1 line too far, so set toScan
+					toScan = false
 				case "o":
 					// parse object
 					retObject.values = append(retObject.values, parseHuscObject(scanner, level+1))
@@ -153,11 +161,10 @@ func parseHuscObject(scanner *bufio.Scanner, level int) huscObject {
 					retObject.values = append(retObject.values, nullHusc)
 				}
 			}
+		} else if countSpaces(line) < (level+1)*4 {
+			return retObject
 		}
-
 	}
-
-	return retObject
 }
 
 func countSpaces(line string) int {

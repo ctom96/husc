@@ -14,7 +14,7 @@ const (
 
 type huscCompliant interface {
 	dataType() int
-	toString() string
+	toString(level int) string
 }
 
 // huscObject is used to represent a single object, like a single
@@ -30,12 +30,16 @@ func (h huscObject) dataType() int {
 	return o
 }
 
-func (h huscObject) toString() string {
-	retStr := h.name + ":{\n"
-	for _, val := range h.values {
-		retStr += "\t" + val.toString() + "\n"
+func (h huscObject) toString(level int) string {
+	var indent string
+	for i := 0; i < level; i++ {
+		indent += "     "
 	}
-	retStr += "}"
+	retStr := "\n" + indent + h.name + " { \n"
+	for _, val := range h.values {
+		retStr += val.toString(level+1) + "\n"
+	}
+	retStr += indent + "}"
 
 	return retStr
 }
@@ -50,12 +54,18 @@ func (h huscArray) dataType() int {
 	return a
 }
 
-func (h huscArray) toString() string {
-	retStr := h.name + ":[\n"
-	for _, val := range h.values {
-		retStr += "\t" + val.toString() + "\n"
+func (h huscArray) toString(level int) string {
+	var retStr string
+	var indent string
+	for i := 0; i < level; i++ {
+		indent += "     "
 	}
-	retStr += "]"
+
+	retStr += "\n" + indent + h.name + " [\n"
+	for _, val := range h.values {
+		retStr += val.toString(level+1) + ","
+	}
+	retStr += indent + "]"
 
 	return retStr
 }
@@ -72,6 +82,11 @@ func (h huscSingle) dataType() int {
 	return h.dType
 }
 
-func (h huscSingle) toString() string {
-	return h.name + ": " + h.value
+func (h huscSingle) toString(level int) string {
+	var indent string
+	for i := 0; i < level; i++ {
+		indent += "     "
+	}
+
+	return indent + h.name + ": " + h.value
 }

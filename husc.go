@@ -51,5 +51,4 @@ func main() {
 
 }
 
-// TODO: Write the library to convert from husc to json
 // TODO: Write the library to convert from json to husc
