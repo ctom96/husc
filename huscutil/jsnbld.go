@@ -67,7 +67,53 @@ func parseHuscArray(scanner *bufio.Scanner, level int) huscArray {
 
 		// add everything else as if it was a huscObject
 		if countSpaces(line) == (level+1)*4 {
-			retArray.values = append(retArray.values, parseHuscObject(scanner, level+1))
+			elems := strings.Fields(line)
+			if len(elems) == 1 {
+				var toApp huscSingle
+				toApp.dType = s
+				toApp.name = "arrayValue"
+				toApp.value = elems[0]
+				retArray.values = append(retArray.values, toApp)
+				scanner.Scan()
+			} else if len(elems) == 2 {
+				switch elems[0] {
+				case "o":
+					retArray.values = append(retArray.values, parseHuscObject(scanner, level+1))
+				case "a":
+					retArray.values = append(retArray.values, parseHuscArray(scanner, level+1))
+				case "s":
+					var toApp huscSingle
+					toApp.dType = s
+					toApp.name = "arrayValue"
+					toApp.value = elems[1]
+					retArray.values = append(retArray.values, toApp)
+					scanner.Scan()
+				case "n":
+					var toApp huscSingle
+					toApp.dType = n
+					toApp.name = "arrayValue"
+					toApp.value = elems[1]
+					retArray.values = append(retArray.values, toApp)
+					scanner.Scan()
+				case "b":
+					var toApp huscSingle
+					toApp.dType = b
+					toApp.name = "arrayValue"
+					toApp.value = elems[1]
+					retArray.values = append(retArray.values, toApp)
+					scanner.Scan()
+				case "N":
+					var toApp huscSingle
+					toApp.dType = N
+					toApp.name = "arrayValue"
+					toApp.value = elems[1]
+					retArray.values = append(retArray.values, toApp)
+					scanner.Scan()
+				}
+			} else {
+				retArray.values = append(retArray.values, parseHuscObject(scanner, level+1))
+			}
+
 		} else if countSpaces(line) < (level+1)*4 {
 			return retArray
 		}
@@ -122,6 +168,8 @@ func parseHuscObject(scanner *bufio.Scanner, level int) huscObject {
 				case "o":
 					// parse object
 					retObject.values = append(retObject.values, parseHuscObject(scanner, level+1))
+					// This function also breaks the scanner, so set toScan to false
+					toScan = false
 				default:
 					// default to string type
 					var stringHusc huscSingle

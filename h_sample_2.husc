@@ -1,0 +1,10 @@
+family:
+    o Dad:
+        o traits:
+            s name Kyle Roberts
+            n age 43
+            s job Programmer
+        a kids:
+            s David
+            Jennifer
+        s spouse Catherine
