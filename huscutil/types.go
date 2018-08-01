@@ -63,7 +63,7 @@ func (h huscArray) toString(level int) string {
 
 	retStr += "\n" + indent + h.name + " [\n"
 	for _, val := range h.values {
-		retStr += val.toString(level+1) + ","
+		retStr += val.toString(level+1) + ",\n"
 	}
 	retStr += indent + "]"
 
