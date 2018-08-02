@@ -8,3 +8,13 @@ family:
             s David
             Jennifer
         s spouse Catherine
+    o Kid:
+        o traits:
+            s name David Roberts
+            n age 12
+            s job Kid
+    o Kid:
+        o traits:
+            s name Jennifer Roberts
+            n age 8
+            s job kid
