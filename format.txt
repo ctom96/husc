@@ -1,6 +1,6 @@
 HUSC data format: A simpler way to write down objects
 
-HUSC -	Hierarchical Universal Struct Core - or really a fuged name to name this format
+HUSC -	Hierarchical Universal Struct Core - or really a fudged name to name this format
 	after my husky puppy Roz
 
 JSON Object:
